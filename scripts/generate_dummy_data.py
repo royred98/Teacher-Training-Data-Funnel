@@ -16,8 +16,9 @@ N_TEACHERS = 50
 TEACHER_IDS = [f"T{i:03d}" for i in range(1, N_TEACHERS + 1)]
 
 MISSING_EL_TEACHERS = {"T007", "T023", "T041"}
-ZERO_OBS_TEACHER = "T015"
-ONE_OBS_TEACHERS = {"T032", "T048"}
+ZERO_OBS_TEACHER = "T015"  # no observations at all
+NO_BASELINE_TEACHERS = {"T012", "T029"}  # post-training visit(s) only, no pre-training data
+NO_FOLLOWUP_TEACHERS = {"T032", "T048"}  # pre-training baseline only, never followed up
 UNMATCHED_TEACHER_ID = "T051"  # observed, but has no training record at all
 
 OBSERVER_POOL = [f"OBS{i:02d}" for i in range(1, 11)]
@@ -41,6 +42,7 @@ def clip_score(x: float) -> int:
 def build_training_tracker():
     rows = []
     training_date = {}
+    bl_avg = {}
     el_avg = {}
 
     training_start, training_end = date(2025, 6, 1), date(2025, 7, 31)
@@ -52,6 +54,7 @@ def build_training_tracker():
         knowledge_bl = clip_score(rng.normal(2.5, 0.8))
         skill_bl = clip_score(rng.normal(2.3, 0.8))
         attitude_bl = clip_score(rng.normal(2.8, 0.8))
+        bl_avg[tid] = float(np.mean([knowledge_bl, skill_bl, attitude_bl]))
 
         knowledge_el = clip_score(knowledge_bl + rng.normal(1.2, 0.7))
         skill_el = clip_score(skill_bl + rng.normal(1.0, 0.7))
@@ -77,7 +80,7 @@ def build_training_tracker():
 
     df = pd.DataFrame(rows)
     df[SCORE_COLS] = df[SCORE_COLS].astype("Int64")
-    return df, training_date, el_avg
+    return df, training_date, bl_avg, el_avg
 
 
 def make_observation(sl_no, tid, obs_date, teacher_el_avg):
@@ -94,28 +97,32 @@ def make_observation(sl_no, tid, obs_date, teacher_el_avg):
     }
 
 
-def build_observation_tool(training_date, el_avg):
+def build_observation_tool(training_date, bl_avg, el_avg):
+    """Each teacher gets a pre-training baseline visit plus 1-2 post-training visits
+    (2-3 total), except for the deliberately injected coverage-gap edge cases."""
     rows = []
     sl_no = 1
     obs_window_end = date(2025, 11, 30)
-
-    pre_training_pool = [t for t in TEACHER_IDS if t not in ({ZERO_OBS_TEACHER} | ONE_OBS_TEACHERS)]
-    pre_training_edge_teachers = set(rng.choice(pre_training_pool, size=2, replace=False))
 
     for tid in TEACHER_IDS:
         if tid == ZERO_OBS_TEACHER:
             continue
 
-        n_obs = 1 if tid in ONE_OBS_TEACHERS else int(rng.integers(2, 4))
         t_date = training_date[tid]
+        has_baseline = tid not in NO_BASELINE_TEACHERS
+        has_followup = tid not in NO_FOLLOWUP_TEACHERS
 
-        for k in range(n_obs):
-            if k == 0 and tid in pre_training_edge_teachers:
-                obs_date = t_date - timedelta(days=int(rng.integers(5, 30)))
-            else:
-                obs_date = random_date(t_date + timedelta(days=14), obs_window_end)
-            rows.append(make_observation(sl_no, tid, obs_date, el_avg[tid]))
+        if has_baseline:
+            pre_date = t_date - timedelta(days=int(rng.integers(5, 30)))
+            rows.append(make_observation(sl_no, tid, pre_date, bl_avg[tid]))
             sl_no += 1
+
+        if has_followup:
+            n_post = int(rng.integers(1, 3))  # 1 or 2 post-training visits
+            for _ in range(n_post):
+                obs_date = random_date(t_date + timedelta(days=14), obs_window_end)
+                rows.append(make_observation(sl_no, tid, obs_date, el_avg[tid]))
+                sl_no += 1
 
     # Cross-table inconsistency: teacher observed but never appears in the training tracker
     for _ in range(2):
@@ -130,8 +137,8 @@ def main():
     out_dir = os.path.join(os.path.dirname(__file__), "..", "data")
     os.makedirs(out_dir, exist_ok=True)
 
-    training_df, training_date, el_avg = build_training_tracker()
-    obs_df = build_observation_tool(training_date, el_avg)
+    training_df, training_date, bl_avg, el_avg = build_training_tracker()
+    obs_df = build_observation_tool(training_date, bl_avg, el_avg)
 
     training_df.to_csv(os.path.join(out_dir, "teacher_training_tracker.csv"), index=False)
     obs_df.to_csv(os.path.join(out_dir, "classroom_observation_tool.csv"), index=False)

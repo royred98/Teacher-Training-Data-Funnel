@@ -1,0 +1,864 @@
+<title>Training → Practice Monitor</title>
+<style>
+  :root {
+    --bg: #F1F3EF;
+    --surface: #FFFFFF;
+    --surface-2: #FAFAF8;
+    --ink: #16211F;
+    --ink-2: #4B5D5A;
+    --ink-muted: #7C8B87;
+    --border: #DDE3DD;
+    --border-soft: #E7ECE6;
+    --accent: #1F6E63;
+    --accent-ink: #0F433C;
+    --accent-soft: #E4EFEC;
+
+    --q-good: #3F8F5F;
+    --q-warn: #B8791C;
+    --q-serious: #B24C3C;
+    --q-other: #2F5FA0;
+    --q-good-soft: rgba(63, 143, 95, 0.12);
+    --q-warn-soft: rgba(184, 121, 28, 0.14);
+    --q-serious-soft: rgba(178, 76, 60, 0.12);
+    --q-other-soft: rgba(47, 95, 160, 0.10);
+
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --shadow-card: 0 1px 2px rgba(22, 33, 31, 0.04), 0 1px 1px rgba(22, 33, 31, 0.03);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12181A;
+      --surface: #1B2422;
+      --surface-2: #202B29;
+      --ink: #EAF1EE;
+      --ink-2: #B9C6C2;
+      --ink-muted: #7E8C88;
+      --border: #2A3432;
+      --border-soft: #263130;
+      --accent: #4FBFA8;
+      --accent-ink: #BEEDE1;
+      --accent-soft: #1E3430;
+
+      --q-good: #4CA070;
+      --q-warn: #B8862A;
+      --q-serious: #C97A5C;
+      --q-other: #5688C9;
+      --q-good-soft: rgba(76, 160, 112, 0.16);
+      --q-warn-soft: rgba(184, 134, 42, 0.18);
+      --q-serious-soft: rgba(201, 122, 92, 0.16);
+      --q-other-soft: rgba(86, 136, 201, 0.16);
+
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #12181A;
+    --surface: #1B2422;
+    --surface-2: #202B29;
+    --ink: #EAF1EE;
+    --ink-2: #B9C6C2;
+    --ink-muted: #7E8C88;
+    --border: #2A3432;
+    --border-soft: #263130;
+    --accent: #4FBFA8;
+    --accent-ink: #BEEDE1;
+    --accent-soft: #1E3430;
+    --q-good: #4CA070;
+    --q-warn: #B8862A;
+    --q-serious: #C97A5C;
+    --q-other: #5688C9;
+    --q-good-soft: rgba(76, 160, 112, 0.16);
+    --q-warn-soft: rgba(184, 134, 42, 0.18);
+    --q-serious-soft: rgba(201, 122, 92, 0.16);
+    --q-other-soft: rgba(86, 136, 201, 0.16);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+
+  :root[data-theme="light"] {
+    --bg: #F1F3EF;
+    --surface: #FFFFFF;
+    --surface-2: #FAFAF8;
+    --ink: #16211F;
+    --ink-2: #4B5D5A;
+    --ink-muted: #7C8B87;
+    --border: #DDE3DD;
+    --border-soft: #E7ECE6;
+    --accent: #1F6E63;
+    --accent-ink: #0F433C;
+    --accent-soft: #E4EFEC;
+    --q-good: #3F8F5F;
+    --q-warn: #B8791C;
+    --q-serious: #B24C3C;
+    --q-other: #2F5FA0;
+    --q-good-soft: rgba(63, 143, 95, 0.12);
+    --q-warn-soft: rgba(184, 121, 28, 0.14);
+    --q-serious-soft: rgba(178, 76, 60, 0.12);
+    --q-other-soft: rgba(47, 95, 160, 0.10);
+    --shadow-card: 0 1px 2px rgba(22, 33, 31, 0.04), 0 1px 1px rgba(22, 33, 31, 0.03);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 28px 80px;
+  }
+
+  /* ---------- Masthead ---------- */
+  header.masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 2px 0 4px;
+    color: var(--ink);
+    text-wrap: balance;
+    max-width: 30ch;
+  }
+  .masthead-meta {
+    color: var(--ink-2);
+    font-size: 14px;
+    max-width: 62ch;
+  }
+  .masthead-meta strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- KPI strip ---------- */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 16px 14px;
+    box-shadow: var(--shadow-card);
+  }
+  .kpi-label {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .kpi-value.accent-warn { color: var(--q-warn); }
+  .kpi-value.accent-muted { color: var(--ink-2); }
+  .kpi-sub {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.35;
+  }
+
+  /* ---------- Panels ---------- */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    padding: 20px 22px 22px;
+  }
+  .panel h2 {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+    margin: 0 0 3px;
+  }
+  .panel .panel-desc {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    margin: 0 0 16px;
+    max-width: 60ch;
+  }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1.4fr;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: stretch;
+  }
+
+  /* ---------- Funnel ---------- */
+  .funnel-row {
+    display: grid;
+    grid-template-columns: 128px 1fr 74px;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+  }
+  .funnel-label {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .funnel-track {
+    height: 20px;
+    background: var(--surface-2);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .funnel-fill {
+    height: 100%;
+    border-radius: 5px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+  .funnel-count {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--ink);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .funnel-count small { color: var(--ink-muted); font-family: var(--font-body); }
+
+  .funnel-footnote {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .funnel-footnote b { color: var(--q-serious); font-family: var(--font-mono); }
+
+  /* ---------- Scatter ---------- */
+  .scatter-wrap { position: relative; }
+  #scatter { width: 100%; height: auto; overflow: visible; }
+  .axis-label {
+    font-size: 11px;
+    fill: var(--ink-muted);
+    font-family: var(--font-body);
+  }
+  .quadrant-label {
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+  .grid-line { stroke: var(--border); stroke-width: 1; }
+  .threshold-line { stroke: var(--ink-muted); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.6; }
+  .dot {
+    stroke: var(--surface);
+    stroke-width: 1.5;
+    cursor: pointer;
+    transition: r 0.12s ease;
+  }
+  .dot:hover { r: 7; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 8px 10px;
+    border-radius: 7px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    transition: opacity 0.1s ease;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip b { font-family: var(--font-mono); }
+
+  /* ---------- Quadrant chips ---------- */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-2);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+  }
+  .chip .dot-swatch { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .chip .chip-count { font-family: var(--font-mono); color: var(--ink-muted); }
+  .chip.active { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+  .chip.dimmed { opacity: 0.45; }
+
+  /* ---------- Data health ---------- */
+  .health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+  }
+  .health-card {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 12px 13px;
+    background: var(--surface-2);
+  }
+  .health-card .h-id {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .health-card .h-flag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: var(--q-serious-soft);
+    color: var(--q-serious);
+  }
+  .health-card .h-flag.integrity { background: var(--q-warn-soft); color: var(--q-warn); }
+  .health-card .h-note {
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+
+  /* ---------- Table ---------- */
+  .table-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .search-input {
+    font-family: var(--font-body);
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink);
+    min-width: 200px;
+  }
+  .search-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .table-hint { font-size: 12px; color: var(--ink-muted); margin-left: auto; }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+  table.teacher-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
+  table.teacher-table th {
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    font-weight: 700;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+  table.teacher-table th:hover { color: var(--ink); }
+  table.teacher-table th .sort-arrow { opacity: 0.4; margin-left: 3px; }
+  table.teacher-table th.sorted .sort-arrow { opacity: 1; color: var(--accent); }
+  table.teacher-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  table.teacher-table tbody tr:last-child td { border-bottom: none; }
+  table.teacher-table tbody tr:hover { background: var(--surface-2); }
+  td.id-cell { font-family: var(--font-mono); font-weight: 700; color: var(--ink); }
+  td.num-cell.positive { color: var(--q-good); }
+  td.num-cell.negative { color: var(--q-serious); }
+
+  .quadrant-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .quadrant-pill .dot-swatch { width: 7px; height: 7px; border-radius: 50%; }
+
+  .flag-pill {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: var(--surface-2);
+    color: var(--ink-muted);
+    border: 1px solid var(--border);
+    margin-right: 4px;
+  }
+
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+
+  footer.methodology {
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    line-height: 1.6;
+  }
+  footer.methodology b { color: var(--ink-2); }
+
+  @media (max-width: 900px) {
+    .analysis-grid { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .funnel-row { grid-template-columns: 92px 1fr 60px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Labhya · SEL Program Monitoring</div>
+    <h1>Does training change what happens in the classroom?</h1>
+    <p class="masthead-meta">
+      Linking <strong>Teacher Training Tracker</strong> (Baseline/Endline KSA scores) to
+      <strong>Classroom Observation Tool</strong> (pre/post-training practice visits) for
+      <strong>50 teachers</strong>, June–Nov 2025 cohort. Illustrative dummy data.
+    </p>
+  </header>
+
+  <section class="kpi-grid" id="kpi-grid"></section>
+
+  <div class="analysis-grid">
+    <div class="panel">
+      <h2>Funnel: Trained → Insight-Ready</h2>
+      <p class="panel-desc">Where teachers drop out of the analysis before an insight can be produced.</p>
+      <div id="funnel"></div>
+      <div class="funnel-footnote" id="funnel-footnote"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Training Gain vs. Practice Change</h2>
+      <p class="panel-desc">Each dot is one teacher (42 insight-ready). Hover for detail.</p>
+      <div class="scatter-wrap">
+        <svg id="scatter" viewBox="0 0 640 420"></svg>
+        <div class="tooltip" id="tooltip"></div>
+      </div>
+      <div class="chip-row" id="chip-row"></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:16px;">
+    <h2>Data Health — needs follow-up before they can be scored</h2>
+    <p class="panel-desc">Kept visible rather than averaged away: these 9 teachers are missing a piece of data the funnel needs.</p>
+    <div class="health-grid" id="health-grid"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Teacher-Level Detail</h2>
+    <p class="panel-desc">Sort any column, search by ID, or click a quadrant chip above to filter.</p>
+    <div class="table-controls">
+      <input type="text" class="search-input" id="search-input" placeholder="Search teacher ID…" />
+      <span class="table-hint" id="table-hint"></span>
+    </div>
+    <div class="table-scroll">
+      <table class="teacher-table" id="teacher-table">
+        <thead><tr id="table-head"></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="methodology">
+    <b>Method:</b> composite training gain = mean(Δknowledge, Δskill, Δattitude), EL−BL.
+    Practice delta = mean(post-training visit composites) − pre-training visit composite.
+    Quadrant thresholds: gain ≥ 1.0 / 5 = "high gain", delta ≥ 0.5 / 5 = "meaningful improvement" — fixed bars, not cohort-relative, so they stay stable across training cycles.
+    Teachers missing a baseline, follow-up, full assessment, or any observation are excluded from quadrant scoring and shown in Data Health instead of being silently dropped or averaged in.
+  </footer>
+
+</div>
+
+<script id="dashboard-data" type="application/json">
+{"teachers": [{"teacher_id": "T001", "training_date": "2025-06-06", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 0.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.0, "post_training_practice_score": 2.75, "post_visit_count": 1.0, "practice_delta": 0.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T002", "training_date": "2025-07-18", "composite_training_gain": 1.67, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 2.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.75, "post_training_practice_score": 3.5, "post_visit_count": 2.0, "practice_delta": 0.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T003", "training_date": "2025-06-25", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 2.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.75, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": 0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T004", "training_date": "2025-07-21", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 3.75, "post_training_practice_score": 3.5, "post_visit_count": 1.0, "practice_delta": -0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Knowing-Doing Gap"}, {"teacher_id": "T005", "training_date": "2025-06-23", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 1.5, "post_training_practice_score": 4.12, "post_visit_count": 2.0, "practice_delta": 2.62, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T006", "training_date": "2025-06-29", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": 3.25, "post_training_practice_score": 3.0, "post_visit_count": 1.0, "practice_delta": -0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T007", "training_date": "2025-07-05", "composite_training_gain": null, "assessment_incomplete": true, "knowledge_gain": null, "skill_gain": null, "attitude_gain": null, "pre_training_practice_score": 1.25, "post_training_practice_score": 3.38, "post_visit_count": 2.0, "practice_delta": 2.12, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T008", "training_date": "2025-07-11", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.5, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": 1.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T009", "training_date": "2025-06-29", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 2.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.0, "post_training_practice_score": 3.75, "post_visit_count": 2.0, "practice_delta": 1.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T010", "training_date": "2025-07-14", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.75, "post_training_practice_score": 3.5, "post_visit_count": 1.0, "practice_delta": 1.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T011", "training_date": "2025-07-19", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.25, "post_training_practice_score": 3.0, "post_visit_count": 1.0, "practice_delta": 0.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T012", "training_date": "2025-06-19", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": null, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": null, "no_baseline": true, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T013", "training_date": "2025-07-31", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 2.5, "post_visit_count": 1.0, "practice_delta": 0.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T014", "training_date": "2025-07-11", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.75, "post_training_practice_score": 3.0, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T015", "training_date": "2025-06-11", "composite_training_gain": 0.0, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": null, "post_training_practice_score": null, "post_visit_count": null, "practice_delta": null, "no_baseline": false, "no_post_observation": false, "pending_observation": true, "single_post_visit": false, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T016", "training_date": "2025-06-24", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.75, "post_training_practice_score": 4.75, "post_visit_count": 1.0, "practice_delta": 2.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T017", "training_date": "2025-07-19", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 0.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.25, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": 1.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T018", "training_date": "2025-06-28", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.0, "post_training_practice_score": 3.5, "post_visit_count": 2.0, "practice_delta": 1.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T019", "training_date": "2025-06-19", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 2.0, "pre_training_practice_score": 2.25, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": 1.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T020", "training_date": "2025-07-09", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 3.5, "post_training_practice_score": 3.5, "post_visit_count": 2.0, "practice_delta": 0.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T021", "training_date": "2025-07-31", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 0.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.5, "post_training_practice_score": 2.75, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T022", "training_date": "2025-07-06", "composite_training_gain": 0.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": -1.0, "pre_training_practice_score": 3.75, "post_training_practice_score": 4.25, "post_visit_count": 1.0, "practice_delta": 0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T023", "training_date": "2025-07-20", "composite_training_gain": null, "assessment_incomplete": true, "knowledge_gain": null, "skill_gain": null, "attitude_gain": null, "pre_training_practice_score": 1.25, "post_training_practice_score": 2.62, "post_visit_count": 2.0, "practice_delta": 1.38, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T024", "training_date": "2025-06-17", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 2.0, "pre_training_practice_score": 1.0, "post_training_practice_score": 2.38, "post_visit_count": 2.0, "practice_delta": 1.38, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T025", "training_date": "2025-07-28", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": 2.0, "pre_training_practice_score": 3.75, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": -0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Knowing-Doing Gap"}, {"teacher_id": "T026", "training_date": "2025-07-17", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.5, "post_training_practice_score": 2.0, "post_visit_count": 1.0, "practice_delta": 0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T027", "training_date": "2025-07-26", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 0.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.75, "post_training_practice_score": 3.25, "post_visit_count": 2.0, "practice_delta": 0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T028", "training_date": "2025-06-16", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 2.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.0, "post_training_practice_score": 4.12, "post_visit_count": 2.0, "practice_delta": 3.12, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T029", "training_date": "2025-06-21", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": null, "post_training_practice_score": 2.5, "post_visit_count": 1.0, "practice_delta": null, "no_baseline": true, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T030", "training_date": "2025-07-11", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 3.0, "post_training_practice_score": 4.25, "post_visit_count": 2.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T031", "training_date": "2025-06-18", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 2.0, "pre_training_practice_score": 3.0, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": 0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Knowing-Doing Gap"}, {"teacher_id": "T032", "training_date": "2025-06-19", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.0, "post_training_practice_score": null, "post_visit_count": null, "practice_delta": null, "no_baseline": false, "no_post_observation": true, "pending_observation": false, "single_post_visit": false, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T033", "training_date": "2025-06-26", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 3.0, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": 0.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T034", "training_date": "2025-06-13", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 3.75, "post_training_practice_score": 4.38, "post_visit_count": 2.0, "practice_delta": 0.62, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T035", "training_date": "2025-07-07", "composite_training_gain": 2.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 3.0, "attitude_gain": 2.0, "pre_training_practice_score": 2.0, "post_training_practice_score": 4.75, "post_visit_count": 1.0, "practice_delta": 2.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T036", "training_date": "2025-07-04", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 2.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T037", "training_date": "2025-06-18", "composite_training_gain": 0.33, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 1.5, "post_training_practice_score": 1.75, "post_visit_count": 2.0, "practice_delta": 0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T038", "training_date": "2025-07-21", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 3.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": 1.0, "post_training_practice_score": 3.5, "post_visit_count": 2.0, "practice_delta": 2.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}, {"teacher_id": "T039", "training_date": "2025-07-22", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 2.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T040", "training_date": "2025-07-20", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.0, "post_training_practice_score": 3.0, "post_visit_count": 1.0, "practice_delta": 1.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T041", "training_date": "2025-07-03", "composite_training_gain": null, "assessment_incomplete": true, "knowledge_gain": null, "skill_gain": null, "attitude_gain": null, "pre_training_practice_score": 1.5, "post_training_practice_score": 2.25, "post_visit_count": 1.0, "practice_delta": 0.75, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T042", "training_date": "2025-06-02", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.25, "post_training_practice_score": 3.25, "post_visit_count": 1.0, "practice_delta": 1.0, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T043", "training_date": "2025-06-14", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 0.0, "skill_gain": 2.0, "attitude_gain": 1.0, "pre_training_practice_score": 3.0, "post_training_practice_score": 3.5, "post_visit_count": 1.0, "practice_delta": 0.5, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T044", "training_date": "2025-06-16", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 0.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 2.75, "post_visit_count": 1.0, "practice_delta": 0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T045", "training_date": "2025-07-06", "composite_training_gain": 1.33, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 2.0, "pre_training_practice_score": 3.0, "post_training_practice_score": 4.25, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Training Translating Well"}, {"teacher_id": "T046", "training_date": "2025-07-18", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 2.12, "post_visit_count": 2.0, "practice_delta": -0.38, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Needs Foundational Support"}, {"teacher_id": "T047", "training_date": "2025-06-11", "composite_training_gain": 0.67, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 0.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 3.75, "post_visit_count": 1.0, "practice_delta": 1.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Improvement from Other Factors"}, {"teacher_id": "T048", "training_date": "2025-06-26", "composite_training_gain": 1.67, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 2.0, "attitude_gain": 1.0, "pre_training_practice_score": 1.75, "post_training_practice_score": null, "post_visit_count": null, "practice_delta": null, "no_baseline": false, "no_post_observation": true, "pending_observation": false, "single_post_visit": false, "quadrant": "Not Insight-Ready"}, {"teacher_id": "T049", "training_date": "2025-07-29", "composite_training_gain": 1.0, "assessment_incomplete": false, "knowledge_gain": 1.0, "skill_gain": 1.0, "attitude_gain": 1.0, "pre_training_practice_score": 2.5, "post_training_practice_score": 2.75, "post_visit_count": 1.0, "practice_delta": 0.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": true, "quadrant": "Knowing-Doing Gap"}, {"teacher_id": "T050", "training_date": "2025-07-22", "composite_training_gain": 2.0, "assessment_incomplete": false, "knowledge_gain": 2.0, "skill_gain": 2.0, "attitude_gain": 2.0, "pre_training_practice_score": 2.75, "post_training_practice_score": 5.0, "post_visit_count": 2.0, "practice_delta": 2.25, "no_baseline": false, "no_post_observation": false, "pending_observation": false, "single_post_visit": false, "quadrant": "Training Translating Well"}], "funnel": [{"stage": "Trained", "count": 50}, {"stage": "Assessed (BL+EL complete)", "count": 47}, {"stage": "Baseline Observed", "count": 47}, {"stage": "Post-Training Observed", "count": 47}, {"stage": "Insight-Ready (delta computed)", "count": 42}, {"stage": "Unmatched teacher_id (data-integrity)", "count": 1}]}
+</script>
+
+<script>
+(function () {
+  const raw = JSON.parse(document.getElementById('dashboard-data').textContent);
+  const teachers = raw.teachers;
+  const funnel = raw.funnel;
+
+  const GAIN_THRESHOLD = 1.0;
+  const DELTA_THRESHOLD = 0.5;
+
+  const QUADRANTS = {
+    "Training Translating Well":      { css: "--q-good",    short: "Translating Well" },
+    "Knowing-Doing Gap":              { css: "--q-warn",    short: "Knowing-Doing Gap" },
+    "Needs Foundational Support":     { css: "--q-serious", short: "Needs Foundation" },
+    "Improvement from Other Factors": { css: "--q-other",   short: "Other Factors" },
+  };
+
+  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const fmt = (v, d) => (v === null || v === undefined || Number.isNaN(v)) ? "—" : Number(v).toFixed(d === undefined ? 2 : d);
+  const pct = (n, total) => Math.round((n / total) * 100);
+
+  // ---------------- KPIs ----------------
+  function renderKPIs() {
+    const total = teachers.length;
+    const assessed = teachers.filter(t => !t.assessment_incomplete);
+    const deltaReady = teachers.filter(t => t.practice_delta !== null && t.practice_delta !== undefined);
+    const insightReady = teachers.filter(t => QUADRANTS[t.quadrant]);
+    const gapTeachers = teachers.filter(t => t.quadrant === "Knowing-Doing Gap");
+    const dataGaps = teachers.filter(t => t.assessment_incomplete || t.no_baseline || t.no_post_observation || t.pending_observation);
+    const avgGain = assessed.reduce((s, t) => s + t.composite_training_gain, 0) / assessed.length;
+    const avgDelta = insightReady.reduce((s, t) => s + t.practice_delta, 0) / insightReady.length;
+
+    const tiles = [
+      { label: "Trained & Assessed", value: `${assessed.length}/${total}`, sub: `${pct(assessed.length, total)}% have complete BL+EL scores` },
+      { label: "Delta-Ready", value: `${deltaReady.length}/${total}`, sub: "Have both a pre- and post-training classroom visit" },
+      { label: "Avg. Training Gain", value: `+${fmt(avgGain, 2)}`, sub: "Mean KSA gain, of 5, among assessed teachers" },
+      { label: "Avg. Practice Change", value: `+${fmt(avgDelta, 2)}`, sub: "Mean practice delta, of 5, among insight-ready teachers" },
+      { label: "Knowing-Doing Gap", value: `${gapTeachers.length}`, sub: "Trained well, practice hasn't moved — needs coaching", cls: "accent-warn" },
+      { label: "Needs Data Follow-Up", value: `${dataGaps.length + 1}`, sub: "Missing assessment, baseline, follow-up visit, or unmatched record", cls: "accent-muted" },
+    ];
+
+    const grid = document.getElementById('kpi-grid');
+    grid.innerHTML = tiles.map(t => `
+      <div class="kpi">
+        <div class="kpi-label">${t.label}</div>
+        <div class="kpi-value ${t.cls || ''}">${t.value}</div>
+        <div class="kpi-sub">${t.sub}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---------------- Funnel ----------------
+  function renderFunnel() {
+    const mainStages = funnel.filter(f => f.stage !== "Unmatched teacher_id (data-integrity)");
+    const unmatched = funnel.find(f => f.stage === "Unmatched teacher_id (data-integrity)");
+    const max = mainStages[0].count;
+    const shortLabels = {
+      "Trained": "Trained",
+      "Assessed (BL+EL complete)": "Assessed",
+      "Baseline Observed": "Baseline Obs.",
+      "Post-Training Observed": "Post-Training Obs.",
+      "Insight-Ready (delta computed)": "Insight-Ready",
+    };
+    const el = document.getElementById('funnel');
+    el.innerHTML = mainStages.map((s, i) => {
+      const w = pct(s.count, max);
+      const lightness = 100 - i * 14; // sequential lightness step, darkest = furthest stage
+      return `
+        <div class="funnel-row">
+          <div class="funnel-label">${shortLabels[s.stage] || s.stage}</div>
+          <div class="funnel-track"><div class="funnel-fill" style="width:${w}%; opacity:${1 - i * 0.14};"></div></div>
+          <div class="funnel-count">${s.count} <small>(${w}%)</small></div>
+        </div>`;
+    }).join('');
+
+    if (unmatched) {
+      document.getElementById('funnel-footnote').innerHTML =
+        `<b>${unmatched.count}</b> teacher_id observed in the Classroom Observation Tool has no matching Training Tracker record — excluded above, tracked as a data-integrity issue.`;
+    }
+  }
+
+  // ---------------- Scatter ----------------
+  const svgNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs) {
+    const e = document.createElementNS(svgNS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  const plot = { x0: 62, x1: 610, y0: 24, y1: 340 };
+  const xDomain = [0, 2.2];
+  const yDomain = [-1, 3.4];
+  const xScale = (v) => plot.x0 + (v - xDomain[0]) / (xDomain[1] - xDomain[0]) * (plot.x1 - plot.x0);
+  const yScale = (v) => plot.y1 - (v - yDomain[0]) / (yDomain[1] - yDomain[0]) * (plot.y1 - plot.y0);
+
+  let activeQuadrants = new Set(Object.keys(QUADRANTS));
+
+  function renderScatter() {
+    const svg = document.getElementById('scatter');
+    svg.innerHTML = '';
+
+    const xThresh = xScale(GAIN_THRESHOLD);
+    const yThresh = yScale(DELTA_THRESHOLD);
+
+    // quadrant background tints (matches build_analytics.py's high_gain/high_delta logic)
+    const zoneMap = [
+      { x: xThresh, y: plot.y0, w: plot.x1 - xThresh, h: yThresh - plot.y0, color: cssVar('--q-good-soft') },
+      { x: xThresh, y: yThresh, w: plot.x1 - xThresh, h: plot.y1 - yThresh, color: cssVar('--q-warn-soft') },
+      { x: plot.x0, y: yThresh, w: xThresh - plot.x0, h: plot.y1 - yThresh, color: cssVar('--q-serious-soft') },
+      { x: plot.x0, y: plot.y0, w: xThresh - plot.x0, h: yThresh - plot.y0, color: cssVar('--q-other-soft') },
+    ];
+    zoneMap.forEach(z => svg.appendChild(svgEl('rect', { x: z.x, y: z.y, width: Math.max(z.w,0), height: Math.max(z.h,0), fill: z.color })));
+
+    // axis gridlines (light)
+    [0, 1, 2].forEach(v => {
+      svg.appendChild(svgEl('line', { class: 'grid-line', x1: xScale(v), x2: xScale(v), y1: plot.y0, y2: plot.y1 }));
+    });
+    [-1, 0, 1, 2, 3].forEach(v => {
+      svg.appendChild(svgEl('line', { class: 'grid-line', x1: plot.x0, x2: plot.x1, y1: yScale(v), y2: yScale(v) }));
+    });
+
+    // threshold lines
+    svg.appendChild(svgEl('line', { class: 'threshold-line', x1: xThresh, x2: xThresh, y1: plot.y0, y2: plot.y1 }));
+    svg.appendChild(svgEl('line', { class: 'threshold-line', x1: plot.x0, x2: plot.x1, y1: yThresh, y2: yThresh }));
+
+    // axis labels
+    [0, 1, 2].forEach(v => {
+      const t = svgEl('text', { class: 'axis-label', x: xScale(v), y: plot.y1 + 18, 'text-anchor': 'middle' });
+      t.textContent = v.toFixed(1); svg.appendChild(t);
+    });
+    [-1, 0, 1, 2, 3].forEach(v => {
+      const t = svgEl('text', { class: 'axis-label', x: plot.x0 - 10, y: yScale(v) + 4, 'text-anchor': 'end' });
+      t.textContent = v.toFixed(1); svg.appendChild(t);
+    });
+    const xAxisTitle = svgEl('text', { class: 'axis-label', x: (plot.x0 + plot.x1) / 2, y: plot.y1 + 38, 'text-anchor': 'middle' });
+    xAxisTitle.textContent = 'Composite training gain (EL − BL, of 5) →';
+    svg.appendChild(xAxisTitle);
+    const yAxisTitle = svgEl('text', { class: 'axis-label', x: 14, y: (plot.y0 + plot.y1) / 2, 'text-anchor': 'middle', transform: `rotate(-90 14 ${(plot.y0 + plot.y1) / 2})` });
+    yAxisTitle.textContent = 'Practice delta (post − pre, of 5) →';
+    svg.appendChild(yAxisTitle);
+
+    // quadrant zone labels
+    const labels = [
+      { x: plot.x1 - 8, y: plot.y0 + 16, text: 'Translating Well', anchor: 'end' },
+      { x: plot.x1 - 8, y: plot.y1 - 8, text: 'Knowing-Doing Gap', anchor: 'end' },
+      { x: plot.x0 + 8, y: plot.y1 - 8, text: 'Needs Foundation', anchor: 'start' },
+      { x: plot.x0 + 8, y: plot.y0 + 16, text: 'Other Factors', anchor: 'start' },
+    ];
+    labels.forEach(l => {
+      const t = svgEl('text', { class: 'quadrant-label', x: l.x, y: l.y, 'text-anchor': l.anchor });
+      t.textContent = l.text; svg.appendChild(t);
+    });
+
+    // dots
+    const tooltip = document.getElementById('tooltip');
+    teachers.filter(t => QUADRANTS[t.quadrant] && activeQuadrants.has(t.quadrant)).forEach(t => {
+      const c = svgEl('circle', {
+        class: 'dot',
+        cx: xScale(t.composite_training_gain),
+        cy: yScale(t.practice_delta),
+        r: 5.5,
+        fill: cssVar(QUADRANTS[t.quadrant].css),
+      });
+      c.addEventListener('mousemove', (e) => {
+        const rect = svg.getBoundingClientRect();
+        tooltip.style.left = (e.clientX - rect.left + svg.parentElement.offsetLeft) + 'px';
+        tooltip.style.top = (e.clientY - rect.top) + 'px';
+        tooltip.innerHTML = `<b>${t.teacher_id}</b> — ${t.quadrant}<br>Gain +${fmt(t.composite_training_gain)} · Δ Practice ${t.practice_delta >= 0 ? '+' : ''}${fmt(t.practice_delta)}<br>Pre ${fmt(t.pre_training_practice_score,2)} → Post ${fmt(t.post_training_practice_score,2)}`;
+        tooltip.classList.add('visible');
+      });
+      c.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+      svg.appendChild(c);
+    });
+  }
+
+  // ---------------- Quadrant chips ----------------
+  function renderChips() {
+    const counts = {};
+    Object.keys(QUADRANTS).forEach(q => counts[q] = teachers.filter(t => t.quadrant === q).length);
+    const row = document.getElementById('chip-row');
+    row.innerHTML = Object.keys(QUADRANTS).map(q => `
+      <div class="chip ${activeQuadrants.has(q) ? 'active' : 'dimmed'}" data-q="${q}">
+        <span class="dot-swatch" style="background:${cssVar(QUADRANTS[q].css)}"></span>
+        ${QUADRANTS[q].short} <span class="chip-count">${counts[q]}</span>
+      </div>
+    `).join('');
+    row.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const q = chip.getAttribute('data-q');
+        if (activeQuadrants.has(q) && activeQuadrants.size === 1) {
+          activeQuadrants = new Set(Object.keys(QUADRANTS)); // reset if trying to deselect last one
+        } else if (activeQuadrants.has(q)) {
+          activeQuadrants.delete(q);
+        } else {
+          activeQuadrants.add(q);
+        }
+        renderScatter();
+        renderChips();
+        renderTable();
+      });
+    });
+  }
+
+  // ---------------- Data health ----------------
+  function renderHealth() {
+    const flagInfo = [
+      { key: 'assessment_incomplete', label: 'Assessment Incomplete', note: 'Endline (EL) scores missing — training impact can\'t be measured.' },
+      { key: 'no_baseline', label: 'No Baseline', note: 'Post-training visit exists but no pre-training visit was recorded.' },
+      { key: 'no_post_observation', label: 'No Follow-Up', note: 'Baseline recorded, but never followed up with a post-training visit.' },
+      { key: 'pending_observation', label: 'Pending Observation', note: 'No classroom visit recorded at all yet.' },
+    ];
+    const cards = [];
+    teachers.forEach(t => {
+      flagInfo.forEach(f => {
+        if (t[f.key]) cards.push({ id: t.teacher_id, label: f.label, note: f.note, integrity: false });
+      });
+    });
+    cards.push({ id: 'T051', label: 'No Training Record', note: 'Observed in the Classroom Observation Tool but has no matching row in the Training Tracker.', integrity: true });
+
+    document.getElementById('health-grid').innerHTML = cards.map(c => `
+      <div class="health-card">
+        <div class="h-id">${c.id}</div>
+        <span class="h-flag ${c.integrity ? 'integrity' : ''}">${c.label}</span>
+        <div class="h-note">${c.note}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---------------- Table ----------------
+  const columns = [
+    { key: 'teacher_id', label: 'Teacher' },
+    { key: 'composite_training_gain', label: 'Training Gain', num: true },
+    { key: 'pre_training_practice_score', label: 'Pre Practice', num: true },
+    { key: 'post_training_practice_score', label: 'Post Practice', num: true },
+    { key: 'practice_delta', label: 'Δ Practice', num: true },
+    { key: 'quadrant', label: 'Quadrant' },
+    { key: 'flags', label: 'Flags' },
+  ];
+  let sortKey = 'teacher_id';
+  let sortDir = 1;
+  let searchTerm = '';
+
+  function teacherFlags(t) {
+    const flags = [];
+    if (t.assessment_incomplete) flags.push('Assessment Incomplete');
+    if (t.no_baseline) flags.push('No Baseline');
+    if (t.no_post_observation) flags.push('No Follow-Up');
+    if (t.pending_observation) flags.push('Pending Observation');
+    if (t.single_post_visit) flags.push('Single Visit');
+    return flags;
+  }
+
+  function renderTableHead() {
+    const head = document.getElementById('table-head');
+    head.innerHTML = columns.map(c => `
+      <th data-key="${c.key}" class="${sortKey === c.key ? 'sorted' : ''}">
+        ${c.label}<span class="sort-arrow">${sortKey === c.key ? (sortDir === 1 ? '▲' : '▼') : '↕'}</span>
+      </th>
+    `).join('');
+    head.querySelectorAll('th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.getAttribute('data-key');
+        if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+        renderTableHead();
+        renderTableBody();
+      });
+    });
+  }
+
+  function renderTableBody() {
+    let rows = teachers.filter(t => QUADRANTS[t.quadrant] ? activeQuadrants.has(t.quadrant) : true);
+    if (searchTerm) rows = rows.filter(t => t.teacher_id.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    rows = rows.slice().sort((a, b) => {
+      let av = a[sortKey], bv = b[sortKey];
+      if (av === null || av === undefined) av = sortKey === 'teacher_id' || sortKey === 'quadrant' ? '' : -Infinity;
+      if (bv === null || bv === undefined) bv = sortKey === 'teacher_id' || sortKey === 'quadrant' ? '' : -Infinity;
+      if (typeof av === 'string') return av.localeCompare(bv) * sortDir;
+      return (av - bv) * sortDir;
+    });
+
+    document.getElementById('table-hint').textContent = `${rows.length} of ${teachers.length} teachers`;
+
+    document.getElementById('table-body').innerHTML = rows.map(t => {
+      const q = QUADRANTS[t.quadrant];
+      const deltaCls = t.practice_delta > 0 ? 'positive' : (t.practice_delta < 0 ? 'negative' : '');
+      const flags = teacherFlags(t).map(f => `<span class="flag-pill">${f}</span>`).join('');
+      return `
+        <tr>
+          <td class="id-cell">${t.teacher_id}</td>
+          <td class="num-cell">${fmt(t.composite_training_gain)}</td>
+          <td class="num-cell">${fmt(t.pre_training_practice_score)}</td>
+          <td class="num-cell">${fmt(t.post_training_practice_score)}</td>
+          <td class="num-cell ${deltaCls}">${t.practice_delta === null || t.practice_delta === undefined ? '—' : (t.practice_delta >= 0 ? '+' : '') + fmt(t.practice_delta)}</td>
+          <td>${q ? `<span class="quadrant-pill" style="background:${cssVar(q.css)}22; color:${cssVar(q.css)}"><span class="dot-swatch" style="background:${cssVar(q.css)}"></span>${q.short}</span>` : '<span class="flag-pill">Not Insight-Ready</span>'}</td>
+          <td>${flags || '—'}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  function renderTable() {
+    renderTableHead();
+    renderTableBody();
+  }
+
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    searchTerm = e.target.value;
+    renderTableBody();
+  });
+
+  // ---------------- Init ----------------
+  renderKPIs();
+  renderFunnel();
+  renderScatter();
+  renderChips();
+  renderHealth();
+  renderTable();
+})();
+</script>

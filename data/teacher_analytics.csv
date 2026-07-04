@@ -1,0 +1,51 @@
+teacher_id,training_date,composite_training_gain,assessment_incomplete,knowledge_gain,skill_gain,attitude_gain,pre_training_practice_score,post_training_practice_score,post_visit_count,practice_delta,no_baseline,no_post_observation,pending_observation,single_post_visit,quadrant
+T001,2025-06-06,0.3333333333333333,False,0.0,0.0,1.0,2.0,2.75,1.0,0.75,False,False,False,True,Improvement from Other Factors
+T002,2025-07-18,1.6666666666666667,False,2.0,2.0,1.0,2.75,3.5,2.0,0.75,False,False,False,False,Training Translating Well
+T003,2025-06-25,1.3333333333333333,False,1.0,2.0,1.0,2.75,3.25,1.0,0.5,False,False,False,True,Training Translating Well
+T004,2025-07-21,1.0,False,1.0,1.0,1.0,3.75,3.5,1.0,-0.25,False,False,False,True,Knowing-Doing Gap
+T005,2025-06-23,1.0,False,2.0,1.0,0.0,1.5,4.125,2.0,2.625,False,False,False,False,Training Translating Well
+T006,2025-06-29,0.3333333333333333,False,1.0,0.0,0.0,3.25,3.0,1.0,-0.25,False,False,False,True,Needs Foundational Support
+T007,2025-07-05,,True,,,,1.25,3.375,2.0,2.125,False,False,False,False,Not Insight-Ready
+T008,2025-07-11,1.0,False,1.0,1.0,1.0,1.5,3.25,1.0,1.75,False,False,False,True,Training Translating Well
+T009,2025-06-29,1.0,False,1.0,2.0,0.0,2.0,3.75,2.0,1.75,False,False,False,False,Training Translating Well
+T010,2025-07-14,1.0,False,1.0,1.0,1.0,1.75,3.5,1.0,1.75,False,False,False,True,Training Translating Well
+T011,2025-07-19,0.3333333333333333,False,1.0,0.0,0.0,2.25,3.0,1.0,0.75,False,False,False,True,Improvement from Other Factors
+T012,2025-06-19,1.3333333333333333,False,2.0,1.0,1.0,,3.75,1.0,,True,False,False,True,Not Insight-Ready
+T013,2025-07-31,0.6666666666666666,False,1.0,1.0,0.0,2.5,2.5,1.0,0.0,False,False,False,True,Needs Foundational Support
+T014,2025-07-11,1.3333333333333333,False,2.0,1.0,1.0,1.75,3.0,1.0,1.25,False,False,False,True,Training Translating Well
+T015,2025-06-11,0.0,False,0.0,0.0,0.0,,,,,False,False,True,False,Not Insight-Ready
+T016,2025-06-24,1.3333333333333333,False,2.0,1.0,1.0,2.75,4.75,1.0,2.0,False,False,False,True,Training Translating Well
+T017,2025-07-19,1.0,False,2.0,0.0,1.0,2.25,3.25,1.0,1.0,False,False,False,True,Training Translating Well
+T018,2025-06-28,1.0,False,1.0,1.0,1.0,2.0,3.5,2.0,1.5,False,False,False,False,Training Translating Well
+T019,2025-06-19,1.3333333333333333,False,1.0,1.0,2.0,2.25,3.75,1.0,1.5,False,False,False,True,Training Translating Well
+T020,2025-07-09,0.3333333333333333,False,0.0,1.0,0.0,3.5,3.5,2.0,0.0,False,False,False,False,Needs Foundational Support
+T021,2025-07-31,0.3333333333333333,False,0.0,0.0,1.0,1.5,2.75,1.0,1.25,False,False,False,True,Improvement from Other Factors
+T022,2025-07-06,0.0,False,1.0,0.0,-1.0,3.75,4.25,1.0,0.5,False,False,False,True,Improvement from Other Factors
+T023,2025-07-20,,True,,,,1.25,2.625,2.0,1.375,False,False,False,False,Not Insight-Ready
+T024,2025-06-17,1.3333333333333333,False,1.0,1.0,2.0,1.0,2.375,2.0,1.375,False,False,False,False,Training Translating Well
+T025,2025-07-28,1.0,False,1.0,0.0,2.0,3.75,3.25,1.0,-0.5,False,False,False,True,Knowing-Doing Gap
+T026,2025-07-17,1.3333333333333333,False,2.0,1.0,1.0,1.5,2.0,1.0,0.5,False,False,False,True,Training Translating Well
+T027,2025-07-26,0.3333333333333333,False,0.0,0.0,1.0,2.75,3.25,2.0,0.5,False,False,False,False,Improvement from Other Factors
+T028,2025-06-16,1.3333333333333333,False,1.0,2.0,1.0,1.0,4.125,2.0,3.125,False,False,False,False,Training Translating Well
+T029,2025-06-21,0.3333333333333333,False,1.0,0.0,0.0,,2.5,1.0,,True,False,False,True,Not Insight-Ready
+T030,2025-07-11,0.6666666666666666,False,1.0,1.0,0.0,3.0,4.25,2.0,1.25,False,False,False,False,Improvement from Other Factors
+T031,2025-06-18,1.3333333333333333,False,1.0,1.0,2.0,3.0,3.25,1.0,0.25,False,False,False,True,Knowing-Doing Gap
+T032,2025-06-19,0.3333333333333333,False,1.0,0.0,0.0,2.0,,,,False,True,False,False,Not Insight-Ready
+T033,2025-06-26,1.0,False,1.0,1.0,1.0,3.0,3.75,1.0,0.75,False,False,False,True,Training Translating Well
+T034,2025-06-13,1.0,False,1.0,1.0,1.0,3.75,4.375,2.0,0.625,False,False,False,False,Training Translating Well
+T035,2025-07-07,2.0,False,1.0,3.0,2.0,2.0,4.75,1.0,2.75,False,False,False,True,Training Translating Well
+T036,2025-07-04,1.3333333333333333,False,1.0,1.0,2.0,2.5,3.75,1.0,1.25,False,False,False,True,Training Translating Well
+T037,2025-06-18,0.3333333333333333,False,0.0,1.0,0.0,1.5,1.75,2.0,0.25,False,False,False,False,Needs Foundational Support
+T038,2025-07-21,1.0,False,3.0,0.0,0.0,1.0,3.5,2.0,2.5,False,False,False,False,Training Translating Well
+T039,2025-07-22,0.6666666666666666,False,0.0,2.0,0.0,2.5,3.75,1.0,1.25,False,False,False,True,Improvement from Other Factors
+T040,2025-07-20,0.6666666666666666,False,1.0,1.0,0.0,2.0,3.0,1.0,1.0,False,False,False,True,Improvement from Other Factors
+T041,2025-07-03,,True,,,,1.5,2.25,1.0,0.75,False,False,False,True,Not Insight-Ready
+T042,2025-06-02,1.0,False,1.0,1.0,1.0,2.25,3.25,1.0,1.0,False,False,False,True,Training Translating Well
+T043,2025-06-14,1.0,False,0.0,2.0,1.0,3.0,3.5,1.0,0.5,False,False,False,True,Training Translating Well
+T044,2025-06-16,0.6666666666666666,False,2.0,0.0,0.0,2.5,2.75,1.0,0.25,False,False,False,True,Needs Foundational Support
+T045,2025-07-06,1.3333333333333333,False,1.0,1.0,2.0,3.0,4.25,1.0,1.25,False,False,False,True,Training Translating Well
+T046,2025-07-18,0.6666666666666666,False,1.0,1.0,0.0,2.5,2.125,2.0,-0.375,False,False,False,False,Needs Foundational Support
+T047,2025-06-11,0.6666666666666666,False,1.0,1.0,0.0,2.5,3.75,1.0,1.25,False,False,False,True,Improvement from Other Factors
+T048,2025-06-26,1.6666666666666667,False,2.0,2.0,1.0,1.75,,,,False,True,False,False,Not Insight-Ready
+T049,2025-07-29,1.0,False,1.0,1.0,1.0,2.5,2.75,1.0,0.25,False,False,False,True,Knowing-Doing Gap
+T050,2025-07-22,2.0,False,2.0,2.0,2.0,2.75,5.0,2.0,2.25,False,False,False,False,Training Translating Well

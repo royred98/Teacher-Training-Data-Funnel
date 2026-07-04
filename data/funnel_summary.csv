@@ -1,0 +1,7 @@
+stage,count
+Trained,50
+Assessed (BL+EL complete),47
+Baseline Observed,47
+Post-Training Observed,47
+Insight-Ready (delta computed),42
+Unmatched teacher_id (data-integrity),1

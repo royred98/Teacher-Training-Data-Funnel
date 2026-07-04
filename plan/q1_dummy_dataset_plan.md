@@ -12,6 +12,11 @@ and **exactly 1 Teacher Training Tracker entry**. Data is kept at the **teacher 
 — no school master or school join. `teacher_id` is the sole key linking the two tables to
 each other; there is no organizational hierarchy above it in this dataset.
 
+**Update:** the Classroom Observation Tool now includes a **pre-training baseline visit**
+for most teachers (mirroring the training tool's BL/EL structure), not just a rare edge
+case, so downstream analytics can measure practice *change*, not just a post-training
+snapshot. See the revised edge-case list below.
+
 ## Schema
 
 ### Classroom Observation Tool (user-specified fields, kept as given)
@@ -41,18 +46,26 @@ linkage between them — no other master/reference table is generated.
 
 Per the timing/missing-data/inconsistency handling already flagged as open in
 `q1_requirements.md`, the generated data should contain real instances of each issue rather
-than being clean:
-- **Missing EL scores** for ~3 teachers (simulates incomplete endline assessment).
-- **Zero observations** for 1 teacher, and **only 1 observation** (instead of 2–3) for 2
-  teachers (simulates monitoring/coverage gaps).
-- **1–2 observation dates that fall before the teacher's training date** (edge case for
-  later "post-training practice" window logic).
+than being clean. The Classroom Observation Tool's 2–3 entries per teacher are now split
+into a **pre-training baseline** slot plus **post-training** slot(s), with these coverage
+patterns:
+
+- **~43 teachers (normal case):** 1 pre-training + 1–2 post-training visits (2–3 total).
+- **1 teacher — zero visits at all** (complete monitoring gap; e.g. `T015`).
+- **2 teachers — "no baseline":** post-training visit(s) only, no pre-training data, so
+  practice *change* can't be measured for them — only an absolute post-training score.
+- **2 teachers — "no follow-up":** pre-training baseline exists, but zero post-training
+  visits — the baseline was collected but the teacher was never followed up on; distinct
+  from the zero-visit case because it's a partial, not total, monitoring gap.
 - **1 `teacher_id` present in the Observation Tool but absent from the Training Tracker**
-  (simulates a teacher observed without a matching training record — a cross-table
-  inconsistency between the two systems, since there's no master table to reconcile
-  against).
+  (e.g. `T051`) — simulates a teacher observed without a matching training record; pre/post
+  is meaningless here since there's no `training_date` to compare against.
+- **Missing EL scores** for ~3 teachers in the Training Tracker (simulates incomplete
+  endline assessment) — independent of the observation-side edge cases above.
 - Observation scores loosely correlated with each teacher's EL scores plus random noise
-  (not pure random), so later funnel/quadrant analysis has real signal to show.
+  (not pure random), so later funnel/quadrant analysis has real signal to show; the
+  post-training composite should generally trend higher than the pre-training composite
+  for teachers with a positive training gain, so the practice delta has real signal too.
 
 ## Generation Approach
 
